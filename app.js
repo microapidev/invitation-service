@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
-const sendHandler = require("controllers/send");
-const verifyHandler = require("controllers/verify");
+const sendHandler = require("./controllers/send");
+const verifyHandler = require("./controllers/verify");
 
 const app = express();
 
