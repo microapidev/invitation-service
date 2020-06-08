@@ -3,13 +3,15 @@ const cors = require("cors");
 
 const sendHandler = require("./controllers/send");
 const verifyHandler = require("./controllers/verify");
+const getAllHandler = require("./controllers/getAll");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.post("/invite/send", sendHandler);
-app.post("/invite/verify", verifyHandler);
+app.get("/invites", getAllHandler);
+app.post("/invites/send", sendHandler);
+app.post("/invites/verify", verifyHandler);
 
 app.use((err, req, res, next) =>
   res.status(500).json({
