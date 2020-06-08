@@ -1,0 +1,24 @@
+{
+  "name": "invitation-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Simeon979/invitation-service.git"
+  },
+  "author": "HNGi7 Team Silver",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Simeon979/invitation-service/issues"
+  },
+  "homepage": "https://github.com/Simeon979/invitation-service#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-validator": "^6.5.0"
+  }
+}
