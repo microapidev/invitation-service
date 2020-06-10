@@ -13,6 +13,12 @@ app.get("/invites", getAllHandler);
 app.post("/invites/send", sendHandler);
 app.post("/invites/verify", verifyHandler);
 
+app.use((req, res, next) => {
+  res.status(404).json({
+    message: "the requested resource was not found",
+  });
+});
+
 app.use((err, req, res, next) =>
   res.status(500).json({
     message: "an error occured while processing your request",
