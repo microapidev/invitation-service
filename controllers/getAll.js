@@ -1,6 +1,6 @@
 let { getAll } = require("../services/store");
 
-const getAllHandler = async (req, res, next) => {
+const getInvites = async (req, res, next) => {
   try {
     let allPending = await getAll();
     return res.json(allPending);
@@ -9,4 +9,4 @@ const getAllHandler = async (req, res, next) => {
   }
 };
 
-module.exports = getAllHandler;
+module.exports = getInvites;
