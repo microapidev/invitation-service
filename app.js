@@ -5,6 +5,7 @@ const sendHandler = require("./controllers/send");
 const verifyHandler = require("./controllers/verify");
 const getAllHandler = require("./controllers/getAll");
 
+
 const app = express();
 
 app.use(cors());
