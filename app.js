@@ -22,9 +22,10 @@ app.get("/", (req, res) => {
 app.get("/v1/documentation", async (req, res, next) => {
   let docUrl = "https://api.jsonbin.io/b/5ee274301f9e4e57881bc673/3";
   try {
-    let json = await fetch(docUrl);
+    let response = await fetch(docUrl);
+    let json = await response.json();
     console.log(json);
-    return res.json(json.json());
+    return res.json(json);
   } catch (err) {
     return next(err);
   }
