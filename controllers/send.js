@@ -55,7 +55,7 @@ const sendHandler = [
       let subject = await getCompanyInfo(companyId, "subject");
       console.log(message);
 
-      //      await send(message, email, subject || `Invitation from ${name}`, name);
+      await send(message, email, subject || `Invitation from ${name}`, name);
       await add(companyId, email, code);
       return res.json({
         message: `We sent a one use code to ${email}`,
