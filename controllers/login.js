@@ -1,6 +1,6 @@
 const { body, sanitizeBody, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { getCompanyLogin } = require("../services/store");
 
 const authenticateUser = [
@@ -24,7 +24,7 @@ const authenticateUser = [
       }
 
       const hash = savedLogin.hash;
-      const authResult = await bcrypt.compare(password, hash);
+      const authResult = bcrypt.compareSync(password, hash);
       if (!authResult) {
         return res.status(401).json({
           message: "incorrect email and password combination",

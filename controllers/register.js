@@ -1,6 +1,6 @@
 const { body, sanitizeBody, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const {
   registerCompany,
@@ -25,9 +25,10 @@ const createUser = [
     try {
       const { name, email, password } = req.body;
       const saltRounds = 10;
-      const hash = await bcrypt.hash(password, saltRounds);
+      const hash = bcrypt.hashSync(password, saltRounds);
       const companyId = await getNewId();
 
+      console.log("here1");
       await registerCompany(email, { companyId, name, hash });
       await configureCompany(companyId, { name });
       const secret = process.env.JWT_KEY;
