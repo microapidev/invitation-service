@@ -1,7 +1,7 @@
 let { body, sanitizeBody, validationResult } = require("express-validator");
 
 let { send } = require("../services/mail");
-let { add } = require("../services/store");
+let { add, getCompanyInfo } = require("../services/store");
 let { generateCode } = require("../invitation");
 
 const EmailValidator = require("email-deep-validator");
@@ -15,43 +15,48 @@ const verifyMail = async (user_email_address) => {
   return wellFormed && validDomain && validMailbox;
 };
 
-let constructMessage = (name, code) => `
-Hello ${name}, you have been invited to Team Silver
+let constructMessage = (name, team, code) => `
+Hello, you have been invited to ${team ? "Team " + team : name}
 
 This is your invitation code: ${code}
 
 This code can only be used once.
 
 Welcome
-(Team silver administrators)
+(${team ? "Team " + team : name})
 `;
 
 const sendHandler = [
   body("email", "cannot be empty").isLength({ min: 1 }).trim(),
   body("email", "invalid email").isEmail(),
-  body("name", "cannot be empty").isLength({ min: 1 }).trim(),
   sanitizeBody("*").escape(),
   async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: "please supply a valid request" });
+      return res
+        .status(400)
+        .json({ message: "please make sure all inputs are filled" });
     }
 
-    let email = req.body.email;
-    let name = req.body.name;
+    let { email, companyId } = req.body;
     let code = generateCode();
-    let message = constructMessage(name, code);
 
     try {
-      let result = await verifyMail(email);
-      if (!result)
-        return res
-          .status(400)
-          .json({ message: "please supply a valid email address " });
+      let message = await getCompanyInfo(companyId, "message");
+      if (!message) {
+        let name = await getCompanyInfo(companyId, "name");
+        let team = await getCompanyInfo(companyId, "team");
+        message = constructMessage(name, team, code);
+      } else {
+        message = message.replace("?code", code);
+      }
 
-      await add({ email, name }, code);
-      await send(message, email);
+      let subject = await getCompanyInfo(companyId, "subject");
+      console.log(message);
+
+      //      await send(message, email, subject || `Invitation from ${name}`, name);
+      await add(companyId, email, code);
       return res.json({
         message: `We sent a one use code to ${email}`,
       });

@@ -14,13 +14,12 @@ const verifyHandler = [
       return res.status(400).json({ message: "bad request" });
     }
 
-    let email = req.body.email;
-    let code = req.body.code;
+    let { email, code, companyId } = req.body;
 
     try {
-      let result = await verify(email, code);
+      let result = await verify(companyId, email, code);
       if (result) {
-        await remove(code);
+        await remove(companyId, email);
         return res.json({
           message: "successfully verified",
           name: result.name,

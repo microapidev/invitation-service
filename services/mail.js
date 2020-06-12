@@ -17,10 +17,10 @@ oauth2Client.setCredentials({
   refresh_token: refreshToken,
 });
 
-const send = async (message, email) => {
+const send = async (message, email, subject, sender) => {
   const accessToken = await oauth2Client.getAccessToken();
 
-  let sender = nodemailer.createTransport({
+  let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
     secure: false,
@@ -37,9 +37,9 @@ const send = async (message, email) => {
     },
   });
 
-  let response = await sender.sendMail({
-    from: "'Team Silver' <hngteamsilver@gmail.com>",
-    subject: "Invitation to Team Silver",
+  let response = await transporter.sendMail({
+    from: `'${sender}' <hngteamsilver@gmail.com>`,
+    subject: subject,
     to: email,
     text: message,
   });
