@@ -20,6 +20,7 @@ let hget = promisify(client.hget).bind(client);
 let hdel = promisify(client.hdel).bind(client);
 let get = promisify(client.get).bind(client);
 let set = promisify(client.set).bind(client);
+let exists = promisify(client.exists).bind(client);
 
 const add = async (companyId, email, code) => {
   console.log(companyId);
@@ -37,7 +38,6 @@ const remove = async (companyId, email) => {
 };
 
 const getAll = async (companyId) => {
-  let allKeys = await keys("*");
   let allValues = await hgetall(`${companyId}-invites`);
   return Object.keys(allValues);
 };
@@ -48,6 +48,11 @@ const configureCompany = async (companyId, settings) => {
 
 const getCompanyInfo = async (companyId, info) => {
   return hget(companyId.toString(), info);
+};
+
+let emailExist = async (email) => {
+  let res = await exists(email);
+  return res === 1;
 };
 
 const registerCompany = async (email, details) => {
@@ -81,4 +86,5 @@ module.exports = {
   getNewId,
   registerCompany,
   getCompanyLogin,
+  emailExist,
 };

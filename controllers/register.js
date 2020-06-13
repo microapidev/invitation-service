@@ -6,6 +6,7 @@ const {
   registerCompany,
   getNewId,
   configureCompany,
+  emailExist,
 } = require("../services/store");
 
 const createUser = [
@@ -26,10 +27,19 @@ const createUser = [
       const { name, email, password } = req.body;
       const saltRounds = 10;
       const hash = bcrypt.hashSync(password, saltRounds);
+
+      let isRegistered = await emailExist(email);
+      if (isRegistered) {
+        return res.status(409).json({ message: "Email already registered" });
+      }
       const companyId = await getNewId();
 
-      console.log("here1");
-      await registerCompany(email, { companyId, name, hash });
+      await registerCompany(email, {
+        companyId,
+        name,
+        hash,
+      });
+
       await configureCompany(companyId, { name });
       const secret = process.env.JWT_KEY;
       const token = jwt.sign({ name, companyId }, secret, {
