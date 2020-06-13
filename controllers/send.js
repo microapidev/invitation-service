@@ -44,9 +44,9 @@ const sendHandler = [
 
     try {
       let message = await getCompanyInfo(companyId, "message");
+      let name = await getCompanyInfo(companyId, "name");
+      let team = await getCompanyInfo(companyId, "team");
       if (!message) {
-        let name = await getCompanyInfo(companyId, "name");
-        let team = await getCompanyInfo(companyId, "team");
         message = constructMessage(name, team, code);
       } else {
         message = message.replace("?code", code);

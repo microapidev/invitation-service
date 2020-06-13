@@ -39,6 +39,7 @@ const remove = async (companyId, email) => {
 
 const getAll = async (companyId) => {
   let allValues = await hgetall(`${companyId}-invites`);
+  allValues = allValues || [];
   return Object.keys(allValues);
 };
 

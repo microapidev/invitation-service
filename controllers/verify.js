@@ -11,7 +11,12 @@ const verifyHandler = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ message: "bad request" });
+      return res
+        .status(400)
+        .json({
+          message: "please make sure all input are filled",
+          errors: errors.errors,
+        });
     }
 
     let { email, code, companyId } = req.body;
